@@ -16,6 +16,9 @@ moist_sens_1 = 0
 #moist_sens_2 = 0
 relay_1 = 3
 relay_2 = 4
+#TODO - Add temp and humidiy from https://gitlab.com/pbelch/my-rep-iot-device/blob/master/get-temp-data.py
+#dht_sensor_port = 8
+#dht_sensor_type = 0
 
 grovepi.pinMode(ledbar,"OUTPUT")
 grovepi.pinMode(relay_1,"OUTPUT")
