@@ -23,8 +23,17 @@ grovepi.pinMode(ledbar,"OUTPUT")
 grovepi.pinMode(relay_1,"OUTPUT")
 grovepi.pinMode(relay_2,"OUTPUT")
 setRGB(0,255,0)
+timeSinceWater = 0
+
+# Set your trigger thresholds here. Will require some expermineting depending
+# on the size and depth of your water resovior
+
+moistureLevelTrigger = 450 # Levelunderwhich water event will trigger
+minWaterLevel = 15 # Minimum water remaining before water events stop
+minWaterGap = 10 # Minimum interval in mins between triggering a watering cycle
 
 time.sleep(1)
+
 
 while True:
     try:
@@ -33,6 +42,7 @@ while True:
         moistureOne = grovepi.analogRead(moist_sens_1)
         [ temp,hum ] = dht(dht_sensor_port,dht_sensor_type)
 
+        # Check if are outside the minWaterGap since last watered - timeSinceWater
         ## Check water level
         ###If water level is ok, check mositure sensor connected
         #### if it is, check if we need to pump and do it
