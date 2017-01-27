@@ -28,30 +28,51 @@ timeSinceWater = 0
 # Set your trigger thresholds here. Will require some expermineting depending
 # on the size and depth of your water resovior
 
+##### turn values to int?
+
 moistureLevelTrigger = 450 # Levelunderwhich water event will trigger
 minWaterLevel = 15 # Minimum water remaining before water events stop
+maxWaterLevel = 150
 minWaterGap = 10 # Minimum interval in mins between triggering a watering cycle
+waterPumpDuration = 2 # Seconds to run pump for
 
 time.sleep(1)
 
-
+### RUN AS A BACKGROUND SCRIPT
 while True:
     try:
         ledLevel = grovepi.ledBar_getBits(ledbar)
         waterDistance = grovepi.ultrasonicRead(ultrasonic_ranger)
         moistureOne = grovepi.analogRead(moist_sens_1)
+        moistureTwo = grovepi.analogRead(moist_sens_2)
         [ temp,hum ] = dht(dht_sensor_port,dht_sensor_type)
 
-        # Check if are outside the minWaterGap since last watered - timeSinceWater
-        ## Check water level
-        ###If water level is ok, check mositure sensor connected
-        #### if it is, check if we need to pump and do it
+        # TODO - Check if are outside the minWaterGap since last watered - timeSinceWater
+        # Check water level
+        if waterDistance > minWaterGap:
+            # if it is, check if we need to pump and do it
+            if moistureOne < moistureLevelTrigger and moist_sens_1:
+                grovepi.digitalWrite(relay_1,1)
+                time.sleep(waterPumpDuration)
+                grovepi.digitalWrite(relay_1,0)
+            if moistureTwo < moistureLevelTrigger and moist_sens_2:
+                grovepi.digitalWrite(relay_2,1)
+                time.sleep(waterPumpDuration)
+                grovepi.digitalWrite(relay_2,0)
 
-        ##disply time, temp and water level. Update LED bar
-            #Write ledbar level
-            #grovepi.ledBar_setLevel(ledbar, i)
-            #Write screen text
-            #setText("Current Position: " + str(i))
+            #disply time, temp and water level. Update LED bar
+            setText("Temp":  + str(temp) + " Hum: " + str(hum))
+
+        else:
+            print "Water level too low to do anything. Log to text file"
+            setText("Temp":  + str(temp) + " Hum: " + str(hum) + "WATER TOO LOW!!")
+
+        #Write ledbar level nased on a case statement
+        segment = int(round((maxWaterLevel - minWaterLevel) / 10))
+        barlevel =  int(round((waterDistance  - minWaterLevel)  / segment))
+        grovepi.ledBar_setLevel(ledbar, barlevel)
+
+        # Add a logging if. If enabled, write log with run determination
 
         #TODO- Set to 15 mins after testing
         time.sleep(5)
