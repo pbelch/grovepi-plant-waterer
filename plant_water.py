@@ -1,11 +1,3 @@
-#       The wiki suggests the following sensor values:
-#               Min  Typ  Max  Condition
-#               0    0    0    sensor in open air
-#               0    20   300  sensor in dry soil
-#               300  580  700  sensor in humid soil
-#               700  940  950  sensor in water
-# grovepi.digitalWrite(relay_1,1) - One on, zero  off
-
 import time
 import grovepi
 from grove_rgb_lcd import *
