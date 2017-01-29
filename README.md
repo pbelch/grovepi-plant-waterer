@@ -13,17 +13,15 @@ STILL WORK IN PROGRESS. PLS CHECK BACK SOON
 
 # Running the script in the background
 Make the script executable:
-'''python
+```python
 chmod +x plant_waterer.py
-'''
+```
 Create a cron job to run the script each time the pi starts:
-'''python
+```python
 sudo crontab -e
-'''
-'''python
 @reboot python /home/pi/plant_waterer.py &
-'''
+```
 You can then view the process ID should you need to force quit using:
-'''python
+```python
 ps ax | grep test.py
-'''
+```
