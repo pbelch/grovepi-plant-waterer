@@ -3,6 +3,18 @@ import grovepi
 from grove_rgb_lcd import *
 import datetime
 import file
+# Configuration required if using API post.
+try:
+    from urllib.parse import urlparse, urlencode
+except ImportError:
+     from urlparse import urlparse
+     from urllib import urlencode
+try:
+    from urllib.request import Request, urlopen
+except ImportError:
+     import urllib2
+     from urllib2 import Request
+     from urllib2 import urlopen
 
 # Set pins for variouse connected grove devices. Disable moist sensors & relay according to how
 # many of them you have configured
@@ -15,6 +27,7 @@ relay_1 = 3
 dht_sensor_port = 8
 dht_sensor_type = 0
 
+
 # Set your trigger thresholds here. Will require some expermineting depending
 # on the size and depth of your water resovior. Run calbiraton script to help you out
 moistureLevelTrigger = 450 # Levelunderwhich water event will trigger
@@ -23,6 +36,10 @@ maxWaterLevel = 150
 minWaterGap = 10 # Minimum interval in mins between triggering a watering cycle
 waterPumpDuration = 2 # Seconds to run pump for
 logging = 1 # Set 1 for enabled, 0 for disabled
+
+# Configuration required if you want to log results to an api
+sendtoApi = 1 # Set 1 for enabled, 0 for disabled
+postUrl = "https://my.api.url.com"
 
 #Set GPIO communicaion type on app startup
 grovepi.pinMode(ledbar,"OUTPUT")
@@ -77,6 +94,17 @@ while True:
             with open(outputfile, "w") as text_file:
                 print(unix_timestamp + ":" + " Water Level:" + waterDistance + " Moisture Levels:" +
                     moistureOne + "/" + moistureTwo + " Last Watered:" + lastWateredOne + "/" + lastWateredTwo + "\n")
+        if sendtoApi > 0 :
+            url = (postUrl)
+            post_fields = {
+                'temp': XXX,
+                'hum': XXX,
+                'moistOne': XXX,
+                'moistTwo': XXX,
+                'waterLevel': XXX
+            }     # Set POST fields here
+            request = Request(url, urlencode(post_fields).encode())
+            urlopen(request)
 
         #TODO- Set to 15 mins after testing (900)
         time.sleep(5)

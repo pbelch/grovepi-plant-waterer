@@ -8,13 +8,18 @@ STILL WORK IN PROGRESS. PLS CHECK BACK SOON
 - Add option to log metrics to an api (and make api!)
 
 # Installing grovePI & waterer script
+###grovepi
 
-# Calibrating the waterer
+### Calibration
 The 'calibrate.py' script will log out the current water and moisture level every 5 seconds. Configure pin values to the
 same as in the main 'plant_waterer.py', and fill water to just above the pump to determine low level limit, and to a safe
 lax level that doesn't cause splash onto the sensor to determine top level <br/><br/>
 For moisture sensors, water you plant to the optimum level, and record that value as the moisture level
-# Running the script in the background
+
+###Additional Features
+******* comment in for second waterer, waterer and logging *****
+
+### Running the script in the background
 Make the script executable:
 ```python
 chmod +x plant_waterer.py
